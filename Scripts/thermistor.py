@@ -54,13 +54,20 @@ if __name__ == '__main__':
         
 def getTemp():
   res = ADC0832.getADC(0)
-  Vr = 3.3 * res / 255
+  print('res', res)
   Vr2 = 3.3 * float(res) / 255
-  Rt = (10000 * 3.3 /  Vr) - 10000
+  Rt = (10000 * 3.3 /  Vr2) - 10000
     
-  temp = 1/(((math.log(Rt / 10000)) / 3455) + (1 / (273.15+25)))
-  Cel = temp - 273.15
-  Fah = Cel * 1.8 + 32
-  time.sleep(0.2)
-
-  return Cel
+    #Rt = 10000 * Vr / (3.3 - Vr)
+    print ('Rt : %.2f' %Rt)
+    temp = 1/(((math.log(Rt / 10000)) / 3455) + (1 / (273.15+25)))
+    Cel = temp - 273.15
+    Fah = Cel * 1.8 + 32
+    print ('Celsius: %.2f C  Fahrenheit: %.2f F' % (Cel, Fah))
+    threshold = potentiometer.getDC()
+    if threshold > 25:
+      buzz_on()
+    else:
+      buzz_off()
+    
+    time.sleep(0.2)
