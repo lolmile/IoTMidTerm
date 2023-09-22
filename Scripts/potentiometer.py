@@ -5,10 +5,7 @@ import time
 
 # GPIO pin for the LED
 LED_PIN = 23
-DC = 0 
-def getDC():
-    
-    return DC
+
  
 
 
@@ -19,8 +16,10 @@ def init():
     global myPWM
     myPWM = GPIO.PWM(LED_PIN, 2000)
     myPWM.start(0)
+   
 
 def loop():
+    init() # Add this line
     while True:
         res = ADC0832_2.getADC(0)
         vol = 3.3/255 * res
@@ -29,10 +28,12 @@ def loop():
         print("DC:%03f"%(DC) )
         myPWM.ChangeDutyCycle(DC)
         time.sleep(0.2)
+        yield DC
         
 
 if __name__ == '__main__':
     init()
+    
     try:
         loop()
     except KeyboardInterrupt: 
