@@ -52,3 +52,20 @@ if __name__ == '__main__':
         GPIO.cleanup()
         #logging.info("Stopping...")
         print ('The end !')
+        
+def runTemp():
+  res = ADC0832.getADC(0)
+  print('res', res)
+  Vr2 = 3.3 * float(res) / 255
+  Rt = (10000 * 3.3 /  Vr2) - 10000
+    
+  temp = 1/(((math.log(Rt / 10000)) / 3455) + (1 / (273.15+25)))
+  Cel = temp - 273.15
+  Fah = Cel * 1.8 + 32
+  threshold = potentiometer.getDC()
+  if threshold > 25:
+    buzz_on()
+  else:
+    buzz_off()
+    
+  time.sleep(0.2)
