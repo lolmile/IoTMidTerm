@@ -54,6 +54,7 @@ if __name__ == '__main__':
         print ('The end !')
         
 def runTemp():
+  init()
   res = ADC0832.getADC(0)
   print('res', res)
   Vr2 = 3.3 * float(res) / 255

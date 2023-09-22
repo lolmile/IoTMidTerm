@@ -4,13 +4,20 @@ import time
 import math
 import potentiometer
 import RPi.GPIO as GPIO
+# Define the pin numbers
+BUTTON_PIN_ON = 19
+BUTTON_PIN_OFF = 13
 buzzer_pin = 25
+
+
 
 def init():
   ADC0832.setup()
   GPIO.setmode(GPIO.BCM)
+    # Set up the button and buzzer pins
+  GPIO.setup(BUTTON_PIN_ON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+  GPIO.setup(BUTTON_PIN_OFF, GPIO.IN, pull_up_down=GPIO.PUD_UP)
   GPIO.setup(buzzer_pin, GPIO.OUT)
-  
 def buzz_on():
   GPIO.output(buzzer_pin, GPIO.HIGH)
 
@@ -19,6 +26,7 @@ def buzz_off():
 
 def loop():
   potentiometer_gen = potentiometer.loop()
+  
   while True:
     
     res = ADC0832.getADC(0)
@@ -36,10 +44,11 @@ def loop():
     Fah = Cel * 1.8 + 32
     print ('Celsius: %.2f C  Fahrenheit: %.2f F' % (Cel, Fah))
     threshold = next(potentiometer_gen)
-    if threshold > 25:
-      buzz_on()
-    else:
-      buzz_off()
+    if GPIO.input(BUTTON_PIN_ON) == GPIO.LOW:
+      if threshold > 25:
+        buzz_on()
+    elif GPIO.input(BUTTON_PIN_OFF) == GPIO.LOW or threshold < 25:
+        buzz_off()
     
     time.sleep(0.2)
    
@@ -52,3 +61,4 @@ if __name__ == '__main__':
         GPIO.cleanup()
         #logging.info("Stopping...")
         print ('The end !')
+        
