@@ -26,7 +26,7 @@ def buzz_off():
 
 def loop():
   potentiometer_gen = potentiometer.loop()
-  
+  buzzer_state = False
   while True:
     
     res = ADC0832.getADC(0)
@@ -51,6 +51,15 @@ def loop():
         buzz_off()
     
     time.sleep(0.2)
+   #CODE TO TRY TO GET THE BUTTONS TO WORK PROPERLY
+  #  if GPIO.input(BUTTON_PIN_ON) == GPIO.LOW:
+  #           buzzer_state = not buzzer_state
+  #           time.sleep(0.2)
+  #       if buzzer_state and threshold > 25:
+  #           buzz_on()
+  #       elif not buzzer_state or GPIO.input(BUTTON_PIN_OFF) == GPIO.LOW or threshold < 25:
+  #           buzz_off()
+   
    
 if __name__ == '__main__':
     init()
