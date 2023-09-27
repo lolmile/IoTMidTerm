@@ -13,9 +13,9 @@ def init():
     ADC0832_2.setup()
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(LED_PIN, GPIO.OUT)
-    global myPWM
-    myPWM = GPIO.PWM(LED_PIN, 2000)
-    myPWM.start(0)
+    # global myPWM
+    # myPWM = GPIO.PWM(LED_PIN, 2000)
+    # myPWM.start(0)
    
 
 def loop():
@@ -23,10 +23,10 @@ def loop():
     while True:
         res = ADC0832_2.getADC(0)
         vol = 3.3/255 * res
-        print ('digital value: %03d  ||  voltage: %.2fV' %(res, vol))
+        #print ('digital value: %03d  ||  voltage: %.2fV' %(res, vol))
         DC = (res / 255)* 100
-        print("DC:%03f"%(DC) )
-        myPWM.ChangeDutyCycle(DC)
+        #print("Temperature Threshold:%02f"%(DC) )
+        #myPWM.ChangeDutyCycle(DC)
         time.sleep(0.2)
         yield DC
         
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     try:
         loop()
     except KeyboardInterrupt: 
-        myPWM.stop()
+       # myPWM.stop()
         ADC0832_2.destroy()
         GPIO.cleanup()
         print ('The end !')
